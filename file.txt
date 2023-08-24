@@ -1,0 +1,7 @@
+1,fam1,nam2,patr3,org4,123456,7890
+2,geniy,nam,patr,organ,3456,789
+3,bolbes,namazz,oth,orga,654,876
+4,fam,bam,vam,gog,03,654
+5,1,nnaamm,ooottthhh,oorrg,1111,1
+6,fam,nam,par,orga,123,321
+7,fffaaamm,naaame,paaa,ggg,9890,2346
