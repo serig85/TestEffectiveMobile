@@ -4,7 +4,7 @@
 param = ('Фамилия', 'Имя', 'Отчество', 'Название организации', 'телефон рабочий', 'телефон личный (сотовый)')
 
 
-def record_output():
+def record_output() -> None:
     """Постраничный вывод"""
     with open('file.txt', 'r', encoding="utf-8") as file:
         rfile = (file.read()).split('\n')
@@ -25,16 +25,17 @@ def record_output():
         input()
 
 
-def record_add():
+def record_add() -> None:
     """Добавление новой записи в справочник
 
     :return:
     """
     with open('file.txt', 'r', encoding="utf-8") as file:
-        for line in file:   # Итерирует весь файл до конца, и берет последнюю строчку.
-            pass
+        # for line in file:   # Итерирует весь файл до конца, и берет последнюю строчку.
+        #    pass
+        line=tuple(enumerate(file))[-1][1]
         new_num = str(int(line.split(',')[0])+1)+','
-    print()
+        print()
     wstr = [new_num]
     for iter_param in enumerate(param):
         inp = input('Введите:'+iter_param[1])+','
@@ -50,7 +51,7 @@ def record_add():
     # tell = input()
 
 
-def modifi_record():
+def modifi_record() -> None:
     """
     Редактирование записи.
     :return:
@@ -78,7 +79,7 @@ def modifi_record():
             file.writelines(line)
 
 
-def searching(obj, promt):
+def searching(obj: list[int], promt: str) -> list[int]:
     """ Функция поиска для всех полей. Поиск ведётся по полному совпалдению.
     :param obj:по какому полю ищем.
     :param promt: что ищем.
@@ -100,7 +101,7 @@ def searching(obj, promt):
     return search_rec
 
 
-def record_search():
+def record_search() -> None:
     """
     Поиск записи. Разделено на 2 функции основную и вспомогательную функцию "searching" предполагал использование
     в других частях программы например функция модификация.
@@ -127,7 +128,7 @@ def record_search():
         print("Не знаю такого параметра ", list(set(par1).difference(set(obr))))
 
 
-"""Коллектор функций"""
+
 if __name__ == '__main__':
     while True:
         print("Что желаете сделать?")
