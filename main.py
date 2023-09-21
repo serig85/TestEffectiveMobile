@@ -79,7 +79,7 @@ def modifi_record() -> None:
             file.writelines(line)
 
 
-def searching(obj: list[int], promt: str) -> list[int]:
+def searching(obj: int, promt: str) -> list[int]:
     """ Функция поиска для всех полей. Поиск ведётся по полному совпалдению.
     :param obj:по какому полю ищем.
     :param promt: что ищем.
