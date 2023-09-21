@@ -1,160 +1,155 @@
+"""Телефонный справочник"""
 
-
-# param = значения требуемых полей содержится в кортеже для исключения модификации и многократного использования.
+# param = значения требу  емых полей содержится в кортеже для исключения модификации и многократного использования.
 param = ('Фамилия', 'Имя', 'Отчество', 'Название организации', 'телефон рабочий', 'телефон личный (сотовый)')
 
 
-def record_output():
+def record_output() -> None:
     """Постраничный вывод"""
-    f = open('file.txt', 'r')
-    ro = (f.read()).split('\n')
-    f.close()
-    lro = len(ro) - 1
-    sti = 'Введите сколько записей выводить на странице? Целое число максимум ' + str(lro) + ' :'
-    pc = int(input(sti))
+    with open('file.txt', 'r', encoding="utf-8") as file:
+        rfile = (file.read()).split('\n')
+    fcount = len(rfile) - 1
+    sti = 'Введите сколько записей выводить на странице? Целое число максимум ' + str(fcount) + ' :'
+    num_of_entries = int(input(sti))
     j = 0
     page = 1
     r_num = 1
-    for i in range(j, lro, pc):
+    for i in range(j, fcount, num_of_entries):
         print('Страница', page)
         page += 1
-        con = i+pc
-        if con > lro:
-            con = lro
-
+        con = i+num_of_entries
+        con = min(con, fcount)
         for j in range(i, con):
-            print(r_num, ', ', ro[j])
+            print(r_num, ', ', rfile[j])
             r_num += 1
         input()
 
 
-def record_add():
+def record_add() -> None:
     """Добавление новой записи в справочник
 
     :return:
     """
-    with open('file.txt') as f:
-        for line in f:
-            pass
+    with open('file.txt', 'r', encoding="utf-8") as file:
+        # for line in file:   # Итерирует весь файл до конца, и берет последнюю строчку.
+        #    pass
+        line=tuple(enumerate(file))[-1][1]
         new_num = str(int(line.split(',')[0])+1)+','
-    print()
+        print()
     wstr = [new_num]
-    f = open('file.txt', 'a')
-    for p in range(len(param)):
-        ip = 'Введите:'+param[p]
-        inp = input(ip)+','
+    for iter_param in enumerate(param):
+        inp = input('Введите:'+iter_param[1])+','
         wstr.append(inp)
     wstr[-1] = wstr[-1][:-1]   # delete ','
     wstr.append('\n')
     print(wstr)
-    f.writelines(wstr)
+    with open('file.txt', 'a', encoding="utf-8") as file:
+        file.writelines(wstr)
     # patronymic = input('Отчество :')
     # org = input('Организация :')
     # telw = input()
     # tell = input()
-    f.close()
 
 
-def modifi_record():
+def modifi_record() -> None:
     """
     Редактирование записи.
     :return:
     """
     spr = []
-    rn = 1
-    with open('file.txt', 'r') as f:
-        for line in f:
+
+    with open('file.txt', 'r', encoding="utf-8") as file:
+        for line in file:
             app = line.strip().split(',')   # app.insert(0,str(rn))
             spr.append(app)  # список для последующей модификации
-            s = str(app)
             # str(rn).ljust(5)+'  '+
-            print(s)
-            rn += 1
+            print(str(app))
     old_rec_num = int(input('Введите номер изменяемой записи:'))
-    for p in range(len(param)):
-        print(p+1, param[p])
+    for iter_param in enumerate(param):
+        print(int(iter_param[0])+1, iter_param[1])
     old_rec_par = int(input('Введите номер изменяемого параметра:'))
     new_rec = input('Введите значение изменяемого параметра:')
     spr[old_rec_num-1][old_rec_par] = new_rec
-    with (open('file.txt', 'w') as f):
+    with open('file.txt', 'w', encoding="utf-8") as file:
         for line in spr:
-            ll = len(line)
-            for i in range(ll-1):
+            linelen = len(line)
+            for i in range(linelen-1):
                 line[i] = line[i] + ','
-            line[ll-1] = line[ll-1]+'\n'
-            f.writelines(line)
+            line[linelen-1] = line[linelen-1]+'\n'
+            file.writelines(line)
 
 
-def searching(ob, promt):
+def searching(obj: int, promt: str) -> list[int]:
     """ Функция поиска для всех полей. Поиск ведётся по полному совпалдению.
-    :param ob:по какому полю ищем.
+    :param obj:по какому полю ищем.
     :param promt: что ищем.
     :return: список порядковых номеров записей
     """
 
     cou_rec = 0
-    se = []
-    f = open('file.txt', 'r')
-    for i in f:
-        fil = i.split(',')
-        fil[ob] = fil[ob].strip('\n')
-        cou_rec += 1
+    search_rec = []
+    with open('file.txt', 'r', encoding="utf-8") as file:
+        for i in file:
+            fil = i.split(',')
+            fil[obj] = fil[obj].strip('\n')
+            cou_rec += 1
 
         # print(fil[0],fil[ob])
-        if fil[ob] == promt:
-            se.append(cou_rec)
-    f.close()
-    return se
+            if fil[obj] == promt:
+                search_rec.append(cou_rec)
+
+    return search_rec
 
 
-def record_search():
+def record_search() -> None:
     """
     Поиск записи. Разделено на 2 функции основную и вспомогательную функцию "searching" предполагал использование
     в других частях программы например функция модификация.
     :return:
     """
     print('\nВыберете по каким параметрам будем искать и запишите их номера через пробел')
-    for p in range(len(param)):
-        print(p + 1, param[p])
+    for iter_param in enumerate(param):
+        print(int(iter_param[0]) + 1, iter_param[1])
     par1 = input('Ввод :')
     # clear and sort list for "if"
     par1 = list(set(par1.split(' ')))
     par1.sort()
-    print(par1)
+    print('Ищем в параметрах', par1)
 
     obr = ['', '1', '2', '3', '4', '5', '6']
     prefix = 'Содержится в строках:'
-    for p in range(len(par1)):
-        print('par1=', par1)
-        print(param[int(par1[p])-1])
+    for iter_par1 in enumerate(par1):
+        print('par1=', iter_par1[1])
+        print(param[int(iter_par1[1])-1])
         promt = input('Что ищем?')
-        print(prefix, searching(int(par1[p]), promt))
+        print(prefix, searching(int(iter_par1[1]), promt))
 
     if list(set(par1).difference(set(obr))):
         print("Не знаю такого параметра ", list(set(par1).difference(set(obr))))
 
 
-"""Коллектор функций"""
-while True:
-    print("Что желаете сделать?")
-    print("1 Вывести весь справочник с заданием количества строк на странице")
-    print("2 Добавить запись")
-    print("3 Редактировать запись")
-    print("4 Найти запись")
-    print("5 Выйти")
-    m = input("Введите номер пункта: ")
-    match m:
-        case '1':
-            print("Вывести")
-            record_output()
-        case '2':
-            print('Добавить')
-            record_add()
-        case '3':
-            print('Редактировать')
-            modifi_record()
-        case '4':
-            print('Найти')
-            record_search()
-        case '5':
-            break
+
+if __name__ == '__main__':
+    while True:
+        print("Что желаете сделать?")
+        print("1 Вывести весь справочник с заданием количества строк на странице")
+        print("2 Добавить запись")
+        print("3 Редактировать запись")
+        print("4 Найти запись")
+        print("5 Выйти")
+        m = input("Введите номер пункта: ")
+        match m:
+            case '1':
+                print("Вывести")
+                record_output()
+            case '2':
+                print('Добавить')
+                record_add()
+            case '3':
+                print('Редактировать')
+                modifi_record()
+            case '4':
+                print('Найти')
+                record_search()
+            case '5':
+                break
