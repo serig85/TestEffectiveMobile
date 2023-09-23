@@ -1,6 +1,6 @@
 """Телефонный справочник"""
 
-# param = значения требу  емых полей содержится в кортеже для исключения модификации и многократного использования.
+# param = значения требуемых полей содержится в кортеже для исключения модификации и многократного использования.
 param = ('Фамилия', 'Имя', 'Отчество', 'Название организации', 'телефон рабочий', 'телефон личный (сотовый)')
 
 
@@ -33,7 +33,7 @@ def record_add() -> None:
     with open('file.txt', 'r', encoding="utf-8") as file:
         # for line in file:   # Итерирует весь файл до конца, и берет последнюю строчку.
         #    pass
-        line=tuple(enumerate(file))[-1][1]
+        line = tuple(enumerate(file))[-1][1]
         new_num = str(int(line.split(',')[0])+1)+','
         print()
     wstr = [new_num]
@@ -126,7 +126,6 @@ def record_search() -> None:
 
     if list(set(par1).difference(set(obr))):
         print("Не знаю такого параметра ", list(set(par1).difference(set(obr))))
-
 
 
 if __name__ == '__main__':
